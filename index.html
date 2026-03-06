@@ -3,107 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraSync | Bio-Acoustic Engine</title>
+    <title>AuraSync | Full Suite</title>
     <style>
         :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --accent: #38bdf8;
-            --pulse: #ef4444;
-            --text: #f1f5f9;
+            --bg: #0f172a; --card: #1e293b; --accent: #38bdf8;
+            --pulse: #ef4444; --text: #f1f5f9; --slider: #475569;
+            --save: #10b981;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg); color: var(--text);
             font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            touch-action: manipulation;
+            margin: 0; display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; padding-bottom: 80px;
         }
 
-        .container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        header { margin: 2rem 0; text-align: center; }
-        h1 { font-weight: 300; letter-spacing: 2px; margin: 0; }
-        .status { font-size: 0.8rem; color: var(--accent); opacity: 0.8; }
-
+        .container { width: 100%; max-width: 480px; padding: 20px; box-sizing: border-box; }
+        header { margin: 1.5rem 0; text-align: center; }
+        h1 { font-weight: 300; letter-spacing: 3px; margin: 0; color: var(--accent); }
+        h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin: 20px 0 10px 0; }
+        
         .card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background: var(--card); border-radius: 24px;
+            padding: 22px; margin-bottom: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .control-group { margin-bottom: 20px; }
-        .label-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
+        .control-group { margin-bottom: 15px; }
+        .label-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; font-weight: 500; }
         
         input[type=range] {
-            width: 100%;
-            height: 6px;
-            border-radius: 5px;
-            appearance: none;
-            background: #334155;
-            outline: none;
+            width: 100%; height: 6px; border-radius: 5px;
+            appearance: none; background: var(--slider); outline: none;
         }
 
         input[type=range]::-webkit-slider-thumb {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--accent);
-            cursor: pointer;
+            appearance: none; width: 22px; height: 22px;
+            border-radius: 50%; background: var(--accent); cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
         }
 
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         button {
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            border: none;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
+            width: 100%; padding: 14px; border-radius: 12px; border: none;
+            font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 0.9rem;
         }
 
-        .primary-btn { background: var(--accent); color: var(--bg); }
-        .sync-btn { 
-            background: transparent; 
-            border: 2px solid var(--pulse); 
-            color: var(--pulse); 
-            margin-top: 10px;
-        }
-
-        .sync-btn.active {
-            background: var(--pulse);
-            color: white;
-            animation: glow 1.5s infinite;
-        }
-
-        @keyframes glow {
-            0% { box-shadow: 0 0 5px var(--pulse); }
-            50% { box-shadow: 0 0 20px var(--pulse); }
-            100% { box-shadow: 0 0 5px var(--pulse); }
-        }
-
-        #video-container {
-            width: 50px; height: 50px; 
-            border-radius: 50%; overflow: hidden;
-            margin: 10px auto; border: 2px solid #334155;
-            display: none;
-        }
-
-        video { object-fit: cover; width: 100%; height: 100%; filter: grayscale(100%) contrast(200%); }
+        .primary-btn { background: var(--accent); color: var(--bg); grid-column: span 2; }
+        .save-btn { background: var(--save); color: white; }
+        .load-btn { background: var(--slider); color: white; }
+        .sync-btn { background: transparent; border: 2px solid var(--pulse); color: var(--pulse); }
+        
+        #video-container { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; margin: 10px auto; display: none; border: 2px solid var(--pulse); }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        
+        .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     </style>
 </head>
 <body>
@@ -111,192 +66,152 @@
 <div class="container">
     <header>
         <h1>AuraSync</h1>
-        <div class="status" id="engine-status">Engine: Standby</div>
+        <div id="engine-status" style="font-size: 0.7rem; opacity: 0.5;">ENGINE STANDBY</div>
     </header>
 
     <div class="card">
-        <button class="primary-btn" id="master-switch">INITIALIZE ENGINE</button>
+        <button class="primary-btn" id="master-switch">START ENGINE</button>
+        <div class="btn-grid">
+            <button class="save-btn" id="save-preset">SAVE PRESET</button>
+            <button class="load-btn" id="load-preset">LOAD LAST</button>
+        </div>
     </div>
 
+    <h2>Master Dynamics (Compressor)</h2>
     <div class="card">
-        <div class="control-group">
-            <div class="label-row">
-                <span>Spatial 3D Orbit</span>
-                <span id="spatial-val">0.27 Hz</span>
+        <div class="comp-grid">
+            <div class="control-group">
+                <div class="label-row"><span>Threshold</span><span id="v-thresh">-24</span></div>
+                <input type="range" class="persist" id="c-thresh" min="-100" max="0" value="-24">
             </div>
-            <input type="range" id="spatial-slider" min="0.01" max="1.5" step="0.01" value="0.27">
+            <div class="control-group">
+                <div class="label-row"><span>Ratio</span><span id="v-ratio">12</span></div>
+                <input type="range" class="persist" id="c-ratio" min="1" max="20" value="12">
+            </div>
+            <div class="control-group">
+                <div class="label-row"><span>Attack</span><span id="v-attack">0.003</span></div>
+                <input type="range" class="persist" id="c-attack" min="0" max="0.5" step="0.001" value="0.003">
+            </div>
+            <div class="control-group">
+                <div class="label-row"><span>Release</span><span id="v-release">0.25</span></div>
+                <input type="range" class="persist" id="c-release" min="0" max="1" step="0.01" value="0.25">
+            </div>
         </div>
-        <p style="font-size: 0.75rem; color: #94a3b8; margin: 0;">Moves noise source 360° using HRTF modeling.</p>
+        <div class="control-group" style="margin-top: 10px;">
+            <div class="label-row"><span>Knee (Sustain)</span><span id="v-knee">30</span></div>
+            <input type="range" class="persist" id="c-knee" min="0" max="40" value="30">
+        </div>
     </div>
 
+    <h2>Spatial & Breathing</h2>
     <div class="card">
         <div class="control-group">
-            <div class="label-row">
-                <span>Breathing Depth</span>
-                <span id="breath-depth-val">47%</span>
-            </div>
-            <input type="range" id="breath-depth-slider" min="0" max="1" step="0.01" value="0.47">
+            <div class="label-row"><span>3D Orbit Speed</span><span id="v-spatial">0.27 Hz</span></div>
+            <input type="range" class="persist" id="spatial-slider" min="0" max="2" step="0.01" value="0.27">
         </div>
-
         <div class="control-group">
-            <div class="label-row">
-                <span>Breathing Speed</span>
-                <span id="breath-speed-val">0.23 Hz</span>
-            </div>
-            <input type="range" id="breath-speed-slider" min="0.05" max="0.8" step="0.01" value="0.23">
+            <div class="label-row"><span>Breath Depth</span><span id="v-breath-d">47%</span></div>
+            <input type="range" class="persist" id="breath-depth" min="0" max="1" step="0.01" value="0.47">
         </div>
-
-        <div id="video-container"><video id="monitor" playsinline></video></div>
         <button class="sync-btn" id="sync-trigger">ACTIVATE BIO-SYNC</button>
+        <div id="video-container"><video id="monitor" playsinline></video></div>
     </div>
 </div>
 
 <script>
-/** * AURA SYNC ENGINE 
- * Core logic for Audio Synthesis, 3D Panning, and PPG Heart Rate Detection
+/** * AURASYNC CORE ENGINE v1.2
  */
+let audioCtx, noiseSource, breathNode, panner, compNode;
+let isLive = false;
 
-let audioCtx, noiseSource, breathingNode, pannerNode;
-let isRunning = false;
-let isSyncing = false;
-
-// Audio Graph Initialization
-const initAudio = () => {
+const startAudio = () => {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
-    // Create White Noise
-    const bufferSize = 2 * audioCtx.sampleRate;
-    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const output = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
-    }
+    // Noise Generation
+    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
 
     noiseSource = audioCtx.createBufferSource();
-    noiseSource.buffer = noiseBuffer;
+    noiseSource.buffer = buffer;
     noiseSource.loop = true;
 
-    // Gain node for "Breathing" effect
-    breathingNode = audioCtx.createGain();
-    
-    // Panner for Spatial 3D
-    pannerNode = audioCtx.createPanner();
-    pannerNode.panningModel = 'HRTF';
-    pannerNode.distanceModel = 'inverse';
+    // Nodes
+    breathNode = audioCtx.createGain();
+    panner = audioCtx.createPanner();
+    panner.panningModel = 'HRTF';
+    compNode = audioCtx.createDynamicsCompressor();
 
-    // Route: Source -> Breathing -> Panner -> Out
-    noiseSource.connect(breathingNode);
-    breathingNode.connect(pannerNode);
-    pannerNode.connect(audioCtx.destination);
+    // Routing
+    noiseSource.connect(breathNode);
+    breathNode.connect(panner);
+    panner.connect(compNode);
+    compNode.connect(audioCtx.destination);
 
     noiseSource.start();
-    updateAudioLoop();
+    requestAnimationFrame(renderLoop);
 };
 
-// Continuous Parameter Modulation
-const updateAudioLoop = () => {
-    const now = audioCtx.currentTime;
-
-    // 1. Spatial Orbit Logic
-    const spatialSpeed = parseFloat(document.getElementById('spatial-slider').value);
-    const x = Math.sin(now * spatialSpeed * 2 * Math.PI) * 5;
-    const z = Math.cos(now * spatialSpeed * 2 * Math.PI) * 5;
-    pannerNode.positionX.value = x;
-    pannerNode.positionZ.value = z;
-
-    // 2. Breathing Logic
-    const breathSpeed = parseFloat(document.getElementById('breath-speed-slider').value);
-    const breathDepth = parseFloat(document.getElementById('breath-depth-slider').value);
-    const baseVol = 1 - (breathDepth / 2);
-    const mod = (Math.sin(now * breathSpeed * 2 * Math.PI) * (breathDepth / 2));
-    breathingNode.gain.value = baseVol + mod;
-
-    requestAnimationFrame(updateAudioLoop);
-};
-
-// PPG Bio-Sync Logic
-const bioSync = {
-    canvas: document.createElement('canvas'),
-    ctx: null,
-    history: [],
+const renderLoop = () => {
+    const t = audioCtx.currentTime;
     
-    process(video) {
-        if (!this.ctx) this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
-        this.ctx.drawImage(video, 0, 0, 10, 10);
-        const data = this.ctx.getImageData(0, 0, 10, 10).data;
-        
-        let rSum = 0;
-        for (let i = 0; i < data.length; i += 4) rSum += data[i];
-        const avg = rSum / (data.length / 4);
+    // Apply Compressor (Live from UI)
+    compNode.threshold.setTargetAtTime(document.getElementById('c-thresh').value, t, 0.03);
+    compNode.ratio.setTargetAtTime(document.getElementById('c-ratio').value, t, 0.03);
+    compNode.attack.setTargetAtTime(document.getElementById('c-attack').value, t, 0.03);
+    compNode.release.setTargetAtTime(document.getElementById('c-release').value, t, 0.03);
+    compNode.knee.setTargetAtTime(document.getElementById('c-knee').value, t, 0.03);
 
-        this.history.push({ v: avg, t: performance.now() });
-        if (this.history.length > 100) this.history.shift();
-        
-        this.analyze();
-    },
+    // Spatial Orbit
+    const speed = document.getElementById('spatial-slider').value;
+    panner.positionX.setTargetAtTime(Math.sin(t * speed * Math.PI * 2) * 5, t, 0.03);
+    panner.positionZ.setTargetAtTime(Math.cos(t * speed * Math.PI * 2) * 5, t, 0.03);
 
-    analyze() {
-        if (this.history.length < 50) return;
-        let peaks = 0;
-        for (let i = 1; i < this.history.length - 1; i++) {
-            if (this.history[i].v > this.history[i-1].v && this.history[i].v > this.history[i+1].v) peaks++;
-        }
-        const timeSpan = (this.history[this.history.length-1].t - this.history[0].t) / 1000;
-        const bpm = (peaks / timeSpan) * 60;
+    // Breath Depth (Using the logic from the previous turn)
+    const depth = document.getElementById('breath-depth').value;
+    const lfo = 0.5 + (Math.sin(t * 0.23 * Math.PI * 2) * (depth / 2)); 
+    breathNode.gain.setTargetAtTime(lfo, t, 0.03);
 
-        if (bpm > 45 && bpm < 110) {
-            const targetHz = (bpm / 60) / 2.5; // Calm ratio
-            document.getElementById('breath-speed-slider').value = targetHz;
-            document.getElementById('breath-speed-val').innerText = `${targetHz.toFixed(2)} Hz (Synced)`;
+    requestAnimationFrame(renderLoop);
+};
+
+// PRESET PERSISTENCE ENGINE
+const savePreset = () => {
+    const settings = {};
+    document.querySelectorAll('.persist').forEach(el => settings[el.id] = el.value);
+    localStorage.setItem('auraSync_preset', JSON.stringify(settings));
+    alert("Preset Cached Successfully!");
+};
+
+const loadPreset = () => {
+    const data = localStorage.getItem('auraSync_preset');
+    if (!data) return alert("No preset found.");
+    const settings = JSON.parse(data);
+    for (const [id, val] of Object.entries(settings)) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.value = val;
+            el.dispatchEvent(new Event('input')); // Update labels
         }
     }
 };
 
-// UI Interaction Listeners
-document.getElementById('master-switch').addEventListener('click', function() {
-    if (!isRunning) {
-        initAudio();
-        this.innerText = "STOP ENGINE";
-        document.getElementById('engine-status').innerText = "Engine: Active (HRTF)";
-        isRunning = true;
-    } else {
-        audioCtx.close();
-        location.reload(); 
-    }
+// UI BINDINGS
+document.querySelectorAll('input[type=range]').forEach(input => {
+    input.oninput = (e) => {
+        const valDisplay = document.getElementById('v-' + e.target.id.replace('c-', ''));
+        if (valDisplay) valDisplay.innerText = e.target.value;
+    };
 });
 
-document.getElementById('sync-trigger').addEventListener('click', async function() {
-    const video = document.getElementById('monitor');
-    const container = document.getElementById('video-container');
+document.getElementById('master-switch').onclick = function() {
+    if(!isLive) { startAudio(); isLive = true; this.innerText = "KILL ENGINE"; }
+    else { audioCtx.close(); location.reload(); }
+};
 
-    if (!isSyncing) {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-            video.srcObject = stream;
-            video.play();
-            container.style.display = 'block';
-            this.classList.add('active');
-            this.innerText = "SYNCING PULSE...";
-            isSyncing = true;
-            setInterval(() => bioSync.process(video), 1000/30);
-        } catch (e) {
-            alert("Camera needed for Bio-Sync.");
-        }
-    }
-});
-
-// Slider UI Updates
-document.getElementById('spatial-slider').addEventListener('input', (e) => {
-    document.getElementById('spatial-val').innerText = `${e.target.value} Hz`;
-});
-document.getElementById('breath-depth-slider').addEventListener('input', (e) => {
-    document.getElementById('breath-depth-val').innerText = `${Math.round(e.target.value * 100)}%`;
-});
-document.getElementById('breath-speed-slider').addEventListener('input', (e) => {
-    document.getElementById('breath-speed-val').innerText = `${e.target.value} Hz`;
-});
+document.getElementById('save-preset').onclick = savePreset;
+document.getElementById('load-preset').onclick = loadPreset;
 
 </script>
 </body>
 </html>
-
